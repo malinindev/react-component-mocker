@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run all checks
+        run: npm run check:all
+
+      - name: Check for changesets
+        run: |
+          if [ ! -d ".changeset" ] || [ -z "$(find .changeset -name '*.md' -not -name 'README.md' -not -name 'config.json')" ]; then
+            echo "⚠️  No changesets found!"
+            echo "Run 'npm run release:prepare and push it into the main branch' first to describe your changes"
+            echo "Then commit and run this workflow again"
+            exit 1
+          fi
+          echo "✅ Changesets found, proceeding with release"
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          publish: npm run release:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }} 
