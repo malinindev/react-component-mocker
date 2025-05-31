@@ -6,11 +6,12 @@ TypeScript NPM package for mocking React components in unit tests.
 
 ### Development
 ```bash
+npm run dev              # Compile TypeScript to dist/ in watch mode
 npm run build            # Compile TypeScript to dist/
 npm run check:all        # Run all checks
 npm run check:format     # Check code formatting with Biome
 npm run check:exports    # Verify package exports work
-npm run check:unit    # Verify package exports work
+npm run test       # Verify package exports work
 npm run release:prepare  # Describe your changes for release
 npm run fix:format       # Fix formatting issues
 ```

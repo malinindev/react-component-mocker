@@ -19,5 +19,11 @@
     "sourceMap": true,
 
     "declaration": true,
-  }
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["dom", "dom.iterable", "es2017"],
+    "types": ["react", "react-dom", "@testing-library/jest-dom", "vitest/globals"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["vitest.config.ts"]
 }

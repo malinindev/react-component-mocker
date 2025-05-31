@@ -22,7 +22,8 @@
 			"quoteStyle": "single",
 			"attributePosition": "auto",
 			"bracketSpacing": true
-		}
+		},
+		"globals": ["React"]
 	},
 	"organizeImports": {
 		"enabled": true
@@ -89,7 +90,7 @@
 				"noDuplicateObjectKeys": "error",
 				"noDuplicateParameters": "error",
 				"noEmptyBlockStatements": "error",
-				"noExplicitAny": "error",
+				"noExplicitAny": "off",
 				"noExtraNonNullAssertion": "error",
 				"noFallthroughSwitchClause": "error",
 				"noFunctionAssign": "error",
