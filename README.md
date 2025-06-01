@@ -10,36 +10,52 @@ npm i -D react-component-mocker
 
 ## Quick Start
 
+### 1. Setup Mock Component
+
+First, mock your component using `vi.mock()` or `jest.mock()`:
+
 ```typescript
-import { createMockComponent, getMockedFunctions, getMockComponentProps } from 'react-component-mocker';
+// File with your test
+import { vi } from 'vitest'; // or jest
+import { createMockComponent } from 'react-component-mocker';
 
-// 1. Create a mock component
-const MockButton = createMockComponent<ButtonComponent>('my-button');
+vi.mock('../components/Button', (): typeof import('../components/Button') => ({
+  Button: createMockComponent<typeof Button>('button-mock'),
+}));
+```
 
-// 2. Use in tests
-const onClickMock = vi.fn() // or jest.fn()
-render(<MockButton onClick={mockClick} label="Click me" />);
+### 2. Use in Tests
 
-// 3. Get mocked functions
-const { onClick } = getMockedFunctions<ButtonComponent>('my-button');
+Now you can use the mocked component in your tests:
 
-onClick?.()
-expect(mockClick).toHaveBeenCalled();
+```typescript
+import { getMockedFunctions, getMockComponentProps } from 'react-component-mocker';
+import { Button } from '../components/Button';
 
-// 4. Check props
-const props = getMockComponentProps<ButtonComponent>(screen.getByTestId('my-button'));
-expect(props.label).toBe('Click me');
+it('should handle button click', () => {
+  const onClickMock = vi.fn();
+  render(<Button onClick={onClickMock} label="Click me" />);
+
+  const { onClick } = getMockedFunctions<typeof Button>('button-mock');
+
+  onClick?.();
+  expect(onClickMock).toHaveBeenCalled();
+
+  const buttonElement = screen.getByTestId('button-mock');
+  const props = getMockComponentProps<typeof Button>(buttonElement);
+  expect(props.label).toBe('Click me');
+});
 ```
 
 ## API
 
 ### `createMockComponent<T>(testId: string)`
 
-Creates a mock React component with type safety.
+Creates a mock React component with type safety. Used inside `vi.mock()` or `jest.mock()`.
 
 ### `getMockedFunctions<T>(testId: string)`
 
-Extracts mocked functions from a component. Throws an error if the element is not found or has no mock functions.
+Extracts mocked functions from a component by test ID. Throws an error if element is not found or has no mock functions.
 
 ### `getMockComponentProps<T>(element: HTMLElement)`
 
