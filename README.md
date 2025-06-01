@@ -2,30 +2,53 @@
 
 TypeScript NPM package for mocking React components in unit tests.
 
-## Commands
+## Installation
 
-### Development
 ```bash
-npm run dev              # Compile TypeScript to dist/ in watch mode
-npm run build            # Compile TypeScript to dist/
-npm run check:all        # Run all checks
-npm run check:format     # Check code formatting with Biome
-npm run check:exports    # Verify package exports work
-npm run test       # Verify package exports work
-npm run release:prepare  # Describe your changes for release
-npm run fix:format       # Fix formatting issues
+npm i -D react-component-mocker
 ```
 
-## Scripts Explained
+## Quick Start
 
-- **`check:all`** - Runs all quality checks before release
-- **`prepublishOnly`** - Automatically runs `ci` when you publish
-- **`release:prepare`** - Interactive tool to describe changes for versioning
+```typescript
+import { createMockComponent, getMockedFunctions, getMockComponentProps } from 'react-component-mocker';
 
-## Release Process
+// 1. Create a mock component
+const MockButton = createMockComponent<ButtonComponent>('my-button');
 
-1. Make changes in `src/`
-2. Run `npm run check:all` to check everything works
-3. Run `npm run release:prepare` to describe changes
-4. Commit and push
-5. Go to GitHub Actions → Release → Run workflow
+// 2. Use in tests
+const onClickMock = vi.fn() // or jest.fn()
+render(<MockButton onClick={mockClick} label="Click me" />);
+
+// 3. Get mocked functions
+const { onClick } = getMockedFunctions<ButtonComponent>('my-button');
+
+onClick?.()
+expect(mockClick).toHaveBeenCalled();
+
+// 4. Check props
+const props = getMockComponentProps<ButtonComponent>(screen.getByTestId('my-button'));
+expect(props.label).toBe('Click me');
+```
+
+## API
+
+### `createMockComponent<T>(testId: string)`
+
+Creates a mock React component with type safety.
+
+### `getMockedFunctions<T>(testId: string)`
+
+Extracts mocked functions from a component. Throws an error if the element is not found or has no mock functions.
+
+### `getMockComponentProps<T>(element: HTMLElement)`
+
+Extracts props from a mock component.
+
+## Roadmap
+
+See our [TODO](TODO.md) for planned features and upcoming improvements.
+
+## License
+
+MIT
