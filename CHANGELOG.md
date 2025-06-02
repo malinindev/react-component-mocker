@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.1.2
+
+### Patch Changes
+
+- 39380b9: patch version for pubilsh
+
 ## 0.1.1
 
 ### Patch Changes
