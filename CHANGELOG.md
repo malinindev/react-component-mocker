@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.1.3
+
+### Patch Changes
+
+- 1685558: partch version 2
+
 ## 0.1.2
 
 ### Patch Changes
