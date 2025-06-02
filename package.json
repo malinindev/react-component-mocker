@@ -1,6 +1,6 @@
 {
   "name": "react-component-mocker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "scripts": {
     "dev": "tsc --project tsconfig.build.json --watch",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
