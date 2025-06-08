@@ -1,14 +1,14 @@
 type PropsMock = Record<string, any> | null;
-type PropsFunctionsMock = Record<string, (...args: any[]) => any> | null;
+type FunctionsMock = Record<string, (...args: any[]) => any> | undefined;
 
-type SeparatePropsAndFunctions = (props: Record<string, any>) => {
+export const separatePropsAndFunctions = (
+  props: Record<string, any>
+): {
   propsMock: PropsMock;
-  functionsMock: PropsFunctionsMock;
-};
-
-export const separatePropsAndFunctions: SeparatePropsAndFunctions = (props) => {
+  functionsMock: FunctionsMock;
+} => {
   let propsMock: PropsMock = null;
-  let functionsMock: PropsFunctionsMock = null;
+  let functionsMock: FunctionsMock = undefined;
 
   for (const [key, value] of Object.entries(props)) {
     propsMock ??= {};
@@ -17,7 +17,7 @@ export const separatePropsAndFunctions: SeparatePropsAndFunctions = (props) => {
       propsMock[key] = `[Function: ${key}]`;
 
       functionsMock ??= {};
-      functionsMock[key] = value as (...args: any[]) => any;
+      functionsMock[key] = value;
     } else {
       propsMock[key] = value;
     }

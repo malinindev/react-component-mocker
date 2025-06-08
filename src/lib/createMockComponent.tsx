@@ -1,7 +1,8 @@
 import type { ComponentType, ReactNode, JSX } from 'react';
-import { useRef, useLayoutEffect } from 'react';
-import type { MockedElement } from '../types/common.js';
+import { useRef, useLayoutEffect, createElement } from 'react';
+import type { ComponentMockElement } from '../types/common.js';
 import { separatePropsAndFunctions } from '../utils/separatePropsAndFunctions.js';
+import { MOCK_COMPONENT } from '../const.js';
 
 type MockComponentType<P = Record<string, unknown>> = (props: P) => JSX.Element;
 
@@ -16,23 +17,26 @@ export const createMockComponent = <T extends ComponentType<any>>(
     children,
     ...restProps
   }) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<ComponentMockElement>(null);
     const { propsMock, functionsMock } = separatePropsAndFunctions(restProps);
 
     useLayoutEffect(() => {
-      if (ref.current && functionsMock) {
-        (ref.current as unknown as MockedElement).functionsMock = functionsMock;
+      if (!ref.current) {
+        return;
       }
+
+      const mockedElement = ref.current;
+      mockedElement.functionsMock = functionsMock;
     });
 
-    return (
-      <div
-        ref={ref}
-        data-testid={testId}
-        {...(propsMock ? { 'data-props': JSON.stringify(propsMock) } : {})}
-      >
-        {children}
-      </div>
+    return createElement(
+      MOCK_COMPONENT.tag,
+      {
+        ref,
+        'data-testid': testId,
+        ...(propsMock ? { 'data-props': JSON.stringify(propsMock) } : {}),
+      },
+      children
     );
   };
 

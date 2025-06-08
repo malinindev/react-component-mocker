@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "tsc --project tsconfig.build.json --watch",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "build:pack": "npm run build && npm pack",
     "release:prepare": "changeset",
     "release:publish": "changeset publish",
     "prepublishOnly": "npm run check:all",
@@ -53,5 +54,6 @@
     "dist"
   ],
   "type": "module",
-  "main": "dist/index.js"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
 }

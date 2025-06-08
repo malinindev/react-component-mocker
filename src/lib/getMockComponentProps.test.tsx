@@ -70,13 +70,28 @@ describe('getMockComponentProps', () => {
     expect(props).toEqual(expectedProps);
   });
 
-  it('throws error when element has no data-props attribute', () => {
+  it('throws error when element is not a mock component', () => {
     render(<div data-testid="no-props" />);
 
     const element = screen.getByTestId('no-props');
 
     expect(() => {
       getMockComponentProps<TestComponent>(element);
-    }).toThrow('Props not found for element with testId: no-props');
+    }).toThrow(
+      'Element with testId "no-props" is not a mock component. Please create a mock component first using createMockComponent("no-props").'
+    );
+  });
+
+  it('throws error when mock component has no data-props attribute', () => {
+    const MockComponent =
+      createMockComponent<ComponentType<{ text?: string }>>('no-data-props');
+
+    render(<MockComponent />);
+
+    const element = screen.getByTestId('no-data-props');
+
+    expect(() => {
+      getMockComponentProps<TestComponent>(element);
+    }).toThrow('Props not found for element with testId: no-data-props');
   });
 });

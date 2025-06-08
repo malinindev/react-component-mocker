@@ -73,6 +73,14 @@ describe('getMockedFunctions', () => {
     );
   });
 
+  it('throws error when element is not a mock component', () => {
+    render(<div data-testid="regular-div" />);
+
+    expect(() => getMockedFunctions('regular-div')).toThrow(
+      'Element with testId "regular-div" is not a mock component. Please create a mock component first using createMockComponent("regular-div").'
+    );
+  });
+
   it('returns different functions for different testIds', () => {
     const MockComponent1 = createMockComponent<TestComponent>('test-1');
     const MockComponent2 = createMockComponent<TestComponent>('test-2');

@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { checkHasMockFunctions } from '../utils/checkHasMockFunctions.js';
+import { checkIsMockElement } from '../utils/checkIsMockElement.js';
 import type { MockedComponentFunctions } from '../types/mockFunctions.js';
 
 export const getMockedFunctions = <T extends ComponentType<any>>(
@@ -11,7 +11,13 @@ export const getMockedFunctions = <T extends ComponentType<any>>(
     throw new Error(`Element with testId "${testId}" not found`);
   }
 
-  if (!checkHasMockFunctions(element)) {
+  if (!checkIsMockElement(element)) {
+    throw new Error(
+      `Element with testId "${testId}" is not a mock component. Please create a mock component first using createMockComponent("${testId}").`
+    );
+  }
+
+  if (!element.functionsMock) {
     throw new Error(
       `Element with testId "${testId}" has no mock functions property inside. Something went wrong`
     );
