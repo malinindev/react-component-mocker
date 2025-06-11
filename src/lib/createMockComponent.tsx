@@ -1,8 +1,8 @@
 import type { ComponentType, ReactNode, JSX } from 'react';
-import { useRef, useLayoutEffect, createElement } from 'react';
+import { useRef, createElement } from 'react';
 import type { ComponentMockElement } from '../types/common.js';
-import { separatePropsAndFunctions } from '../utils/separatePropsAndFunctions.js';
 import { MOCK_COMPONENT } from '../const.js';
+import { preparePropsToStringify } from '../utils/preparePropsToStringify.js';
 
 type MockComponentType<P = Record<string, unknown>> = (props: P) => JSX.Element;
 
@@ -18,23 +18,29 @@ export const createMockComponent = <T extends ComponentType<any>>(
     ...restProps
   }) => {
     const ref = useRef<ComponentMockElement>(null);
-    const { propsMock, functionsMock } = separatePropsAndFunctions(restProps);
+    const propsToAssign =
+      Object.keys(restProps).length > 0 ? restProps : undefined;
 
-    useLayoutEffect(() => {
-      if (!ref.current) {
-        return;
-      }
-
-      const mockedElement = ref.current;
-      mockedElement.functionsMock = functionsMock;
-    });
+    // Update props on every render (except first, when ref.current is still null)
+    if (ref.current) {
+      ref.current.props = propsToAssign;
+    }
 
     return createElement(
       MOCK_COMPONENT.tag,
       {
-        ref,
+        ref: (element: ComponentMockElement | null): void => {
+          ref.current = element;
+          // Set props on first element creation
+          // (at this moment component body already executed, but ref.current was null)
+          if (element) {
+            element.props = propsToAssign;
+          }
+        },
         'data-testid': testId,
-        ...(propsMock ? { 'data-props': JSON.stringify(propsMock) } : {}),
+        'data-props-for-debug': propsToAssign
+          ? JSON.stringify(preparePropsToStringify(propsToAssign))
+          : undefined,
       },
       children
     );

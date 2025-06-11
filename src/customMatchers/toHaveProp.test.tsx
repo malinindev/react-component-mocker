@@ -59,7 +59,7 @@ describe('Custom Matcher: toHaveProp', () => {
 
     expect(element).toHaveProp({ title: 'Hello World' });
     expect(element).toHaveProp({ count: 42 });
-    expect(element).toHaveProp({ onClick: '[Function: onClick]' });
+    expect(element).toHaveProp({ onClick: mockClick });
   });
 
   it('should fail when prop value does not match expected', () => {

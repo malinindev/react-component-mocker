@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 import { getMockComponentProps } from '../lib/getMockComponentProps.js';
-import { deepEqual } from '../utils/deepEqual.js';
+import { deepEqual } from '../utils/deepEqual/index.js';
 import { DiffError } from './helpers/DiffError.js';
 import type { ComponentMockElement } from '../types/common.js';
 
@@ -67,7 +67,7 @@ expect.extend({
         };
       }
 
-      const actualValue = (actualProps as Record<string, any>)[key];
+      const actualValue = actualProps[key];
       const isMatch = deepEqual(actualValue, expectedValue);
 
       if (isMatch) {

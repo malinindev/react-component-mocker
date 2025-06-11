@@ -12,7 +12,7 @@ interface TestProps {
 type TestComponent = ComponentType<TestProps>;
 
 describe('Custom Matcher: toHaveProps', () => {
-  it('should pass when element has mock props (без expectedProps)', () => {
+  it('should pass when element has mock props (without expectedProps)', () => {
     const MockComponent = createMockComponent<TestComponent>('test-component');
     const mockClick = vi.fn();
 
@@ -39,7 +39,7 @@ describe('Custom Matcher: toHaveProps', () => {
     expect(element).toHaveProps({
       title: 'Hello World',
       count: 42,
-      onClick: '[Function: onClick]',
+      onClick: mockClick,
     });
   });
 
@@ -58,7 +58,7 @@ describe('Custom Matcher: toHaveProps', () => {
       expect(element).toHaveProps({
         title: 'Expected Title',
         count: 42,
-        onClick: '[Function: onClick]',
+        onClick: mockClick,
       });
     }).toThrow();
   });
@@ -105,5 +105,73 @@ describe('Custom Matcher: toHaveProps', () => {
     const element = screen.getByTestId('test-component-check');
 
     expect(element.tagName).toBe('COMPONENT-MOCK');
+  });
+
+  it('should pass when expectedProps contains actual functions', () => {
+    const MockComponent = createMockComponent<TestComponent>(
+      'test-component-func'
+    );
+    const mockClick = vi.fn();
+
+    render(<MockComponent title="Test" count={1} onClick={mockClick} />);
+
+    const element = screen.getByTestId('test-component-func');
+
+    expect(element).toHaveProps({
+      title: 'Test',
+      count: 1,
+      onClick: mockClick,
+    });
+  });
+
+  it('should pass when nested expectedProps contains functions', () => {
+    const MockComponent = createMockComponent<
+      ComponentType<{
+        config: { handler: () => void };
+      }>
+    >('test-component-nested');
+
+    const handler = vi.fn();
+    render(<MockComponent config={{ handler }} />);
+
+    const element = screen.getByTestId('test-component-nested');
+
+    expect(element).toHaveProps({
+      config: { handler },
+    });
+  });
+
+  it('should pass when using expect.any(Function) matcher', () => {
+    const MockComponent = createMockComponent<TestComponent>(
+      'test-component-any-function'
+    );
+    const mockClick = vi.fn();
+
+    render(<MockComponent title="Test Title" count={99} onClick={mockClick} />);
+
+    const element = screen.getByTestId('test-component-any-function');
+
+    expect(element).toHaveProps({
+      title: 'Test Title',
+      count: 99,
+      onClick: expect.any(Function),
+    });
+  });
+
+  it('should pass when using multiple expect.any() matchers', () => {
+    const MockComponent = createMockComponent<TestComponent>(
+      'test-component-multiple-any'
+    );
+    const mockClick = vi.fn();
+
+    render(<MockComponent title="Any Title" count={42} onClick={mockClick} />);
+
+    const element = screen.getByTestId('test-component-multiple-any');
+
+    expect(element).toHaveProps({
+      title: expect.any(String),
+      count: expect.any(Number),
+      onClick: expect.any(Function),
+    });
   });
 });

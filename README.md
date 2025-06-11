@@ -29,20 +29,21 @@ vi.mock('../components/Button', (): typeof import('../components/Button') => ({
 Now you can use the mocked component in your tests:
 
 ```typescript
-import { getMockedFunctions, getMockComponentProps } from 'react-component-mocker';
+import { getMockComponentProps } from 'react-component-mocker';
 import { Button } from '../components/Button';
 
 it('should handle button click', () => {
   const onClickMock = vi.fn();
   render(<Button onClick={onClickMock} label="Click me" />);
 
-  const { onClick } = getMockedFunctions<typeof Button>('button-mock');
-
-  onClick?.();
-  expect(onClickMock).toHaveBeenCalled();
-
   const buttonElement = screen.getByTestId('button-mock');
   const props = getMockComponentProps<typeof Button>(buttonElement);
+  
+  // Access function props directly
+  props.onClick?.();
+  expect(onClickMock).toHaveBeenCalled();
+  
+  // Access other props
   expect(props.label).toBe('Click me');
 });
 ```
@@ -53,13 +54,9 @@ it('should handle button click', () => {
 
 Creates a mock React component with type safety. Used inside `vi.mock()` or `jest.mock()`.
 
-### `getMockedFunctions<T>(testId: string)`
-
-Extracts mocked functions from a component by test ID. Throws an error if element is not found or has no mock functions.
-
 ### `getMockComponentProps<T>(element: HTMLElement)`
 
-Extracts props from a mock component.
+Extracts all props (including functions) from a mock component. Functions remain as actual function references, not serialized strings.
 
 ## Roadmap
 

@@ -1,19 +1,16 @@
 import type { ComponentProps, ComponentType } from 'react';
 import { checkIsMockElement } from '../utils/checkIsMockElement.js';
 
-type SerializeValue<T> = T extends (...args: any[]) => any
-  ? `[Function: ${string}]`
-  : T;
-
-type SerializedProps<T> = {
-  [K in keyof T]: SerializeValue<T[K]>;
-};
-
-export const getMockComponentProps = <
-  T extends ComponentType<any> = ComponentType<unknown>,
->(
+export function getMockComponentProps(
   element: HTMLElement
-): SerializedProps<ComponentProps<T>> => {
+): Record<string, any>;
+export function getMockComponentProps<T extends ComponentType<any>>(
+  element: HTMLElement
+): ComponentProps<T>;
+
+export function getMockComponentProps<
+  T extends ComponentType<any> = ComponentType<unknown>,
+>(element: HTMLElement): ComponentProps<T> | Record<string, any> {
   if (!checkIsMockElement(element)) {
     const testIdAttr = element.getAttribute('data-testid');
 
@@ -22,14 +19,12 @@ export const getMockComponentProps = <
     );
   }
 
-  const propsString = element.getAttribute('data-props');
-
-  if (!propsString) {
+  if (!element.props) {
     const testIdAttr = element.getAttribute('data-testid');
     throw new Error(
       `Props not found for element with testId: ${testIdAttr ?? 'unknown'}`
     );
   }
 
-  return JSON.parse(propsString);
-};
+  return element.props;
+}

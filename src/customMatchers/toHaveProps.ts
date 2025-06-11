@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 import { getMockComponentProps } from '../lib/getMockComponentProps.js';
-import { deepEqual } from '../utils/deepEqual.js';
+import { deepEqual } from '../utils/deepEqual/index.js';
 import { DiffError } from './helpers/DiffError.js';
 import type { ComponentMockElement } from '../types/common.js';
 
@@ -10,10 +10,10 @@ interface MatcherResult {
 }
 
 expect.extend({
-  toHaveProps(
+  toHaveProps: (
     received: ComponentMockElement,
-    expectedProps?: Record<string, any>
-  ): MatcherResult {
+    expectedProps?: Record<string, unknown>
+  ): MatcherResult => {
     try {
       const actualProps = getMockComponentProps(received);
 
