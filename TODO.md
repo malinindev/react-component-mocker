@@ -5,16 +5,7 @@
 ### Short Term (v0.2.x)
 - [ ] **Documentation** - docs with examples and best practices
 - [ ] **Ref Support** - Add support for forwarding refs in mock components
-- [ ] **Jest/Vitest Matchers** - Custom matchers for easier testing:
-  ```typescript
-  // Instead of verbose checks
-  const props = getMockComponentProps<ButtonComponent>(element);
-  expect(props.label).toBe('Click me');
-  
-  // Write clean assertions
-  expect(element).toHaveProps({ label: 'Click me' });
-  ```
-  Supports both Jest and Vitest out of the box.
+- [x] **Jest/Vitest Matchers** - Custom matchers for easier testing
 
 ## Contributing
 Want to help? Check out [CONTRIBUTING.md](CONTRIBUTING.md) and pick a feature to work on!
