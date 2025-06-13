@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.1.6
+
+### Patch Changes
+
+- cc1d5f2: update package.json
+
 ## 0.1.5
 
 ### Patch Changes

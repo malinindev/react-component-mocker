@@ -1,6 +1,6 @@
 {
   "name": "react-component-mocker",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Helps mock React components in unit tests",
   "author": "Serge Malinin <s@malinin.dev>",
   "license": "MIT",
@@ -12,14 +12,18 @@
   "bugs": {
     "url": "https://github.com/malinindev/react-component-mocker/issues"
   },
-  "keywords": ["React unit", "React component mocker"],
-
+  "keywords": [
+    "React unit",
+    "React component mocker"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-
-  "files": ["dist", "README.md", "LICENSE"],
-
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "tsc --project tsconfig.build.json --watch",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
@@ -35,15 +39,12 @@
     "check:format": "biome format ./src",
     "fix:format": "biome format --write ./src"
   },
-
   "publishConfig": {
     "access": "public"
   },
-
   "peerDependencies": {
     "react": ">=18.0.0"
   },
-
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.4",
     "@biomejs/biome": "1.9.4",
