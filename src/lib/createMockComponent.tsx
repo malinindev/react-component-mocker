@@ -1,7 +1,8 @@
 import type { ComponentType, ReactNode, JSX } from 'react';
-import { useRef, useLayoutEffect } from 'react';
-import type { MockedElement } from '../types/common.js';
-import { separatePropsAndFunctions } from '../utils/separatePropsAndFunctions.js';
+import { useRef, createElement } from 'react';
+import type { ComponentMockElement } from '../types/common.js';
+import { MOCK_COMPONENT } from '../const.js';
+import { preparePropsToStringify } from '../utils/preparePropsToStringify.js';
 
 type MockComponentType<P = Record<string, unknown>> = (props: P) => JSX.Element;
 
@@ -16,23 +17,32 @@ export const createMockComponent = <T extends ComponentType<any>>(
     children,
     ...restProps
   }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const { propsMock, functionsMock } = separatePropsAndFunctions(restProps);
+    const ref = useRef<ComponentMockElement>(null);
+    const propsToAssign =
+      Object.keys(restProps).length > 0 ? restProps : undefined;
 
-    useLayoutEffect(() => {
-      if (ref.current && functionsMock) {
-        (ref.current as unknown as MockedElement).functionsMock = functionsMock;
-      }
-    });
+    // Update props on every render (except first, when ref.current is still null)
+    if (ref.current) {
+      ref.current.props = propsToAssign;
+    }
 
-    return (
-      <div
-        ref={ref}
-        data-testid={testId}
-        {...(propsMock ? { 'data-props': JSON.stringify(propsMock) } : {})}
-      >
-        {children}
-      </div>
+    return createElement(
+      MOCK_COMPONENT.tag,
+      {
+        ref: (element: ComponentMockElement | null): void => {
+          ref.current = element;
+          // Set props on first element creation
+          // (at this moment component body already executed, but ref.current was null)
+          if (element) {
+            element.props = propsToAssign;
+          }
+        },
+        'data-testid': testId,
+        'data-props-for-debug': propsToAssign
+          ? JSON.stringify(preparePropsToStringify(propsToAssign))
+          : undefined,
+      },
+      children
     );
   };
 
