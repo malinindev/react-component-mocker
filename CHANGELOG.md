@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.1.5
+
+### Patch Changes
+
+- 53c864d: Patch version
+
 ## 0.1.4
 
 ### Patch Changes
