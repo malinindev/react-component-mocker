@@ -1,6 +1,6 @@
 {
   "name": "react-component-mocker",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Helps mock React components in unit tests",
   "author": "Serge Malinin <s@malinin.dev>",
   "license": "MIT",
