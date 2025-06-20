@@ -3,8 +3,8 @@
 ## Planned Features
 
 ### Short Term (v0.2.x)
-- [ ] **Documentation** - docs with examples and best practices
-- [ ] **Ref Support** - Add support for forwarding refs in mock components
+- [x] **Documentation** - docs with examples and best practices
+- [ ] **Jest Support** - Add jest support
 - [x] **Jest/Vitest Matchers** - Custom matchers for easier testing
 
 ## Contributing
