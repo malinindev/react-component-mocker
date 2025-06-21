@@ -15,7 +15,6 @@
 
     "module": "NodeNext",
     "outDir": "dist",
-    "rootDir": "src",
     "sourceMap": true,
 
     "declaration": true,
@@ -29,6 +28,6 @@
       "vitest/globals"
     ]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "examples/**/*"],
   "exclude": ["vitest.config.ts"]
 }

@@ -1,6 +1,8 @@
 # React Component Mocker
 
-TypeScript NPM package for mocking React components in unit tests.
+Mock internal child components in unit tests with full type safety. Focus only on your main component’s logic.
+
+[Vitest examples](examples/)
 
 ## Installation
 
@@ -10,57 +12,55 @@ npm i -D react-component-mocker
 
 ## Quick Start
 
-### 1. Setup Mock Component
 
-First, mock your component using `vi.mock()` or `jest.mock()`:
+```ts
+import { createMockComponent, getMockComponentProps } from 'react-component-mocker';
 
-```typescript
-// File with your test
-import { vi } from 'vitest'; // or jest
-import { createMockComponent } from 'react-component-mocker';
-
-vi.mock('../components/Button', (): typeof import('../components/Button') => ({
-  Button: createMockComponent<typeof Button>('button-mock'),
+vi.mock('./ChildComponent.tsx', () => ({
+  ChildComponent: createMockComponent('child-component-mock')
 }));
-```
 
-### 2. Use in Tests
 
-Now you can use the mocked component in your tests:
+it('works with props correctly', () => {
+  render(<MainComponent />);
 
-```typescript
-import { getMockComponentProps } from 'react-component-mocker';
-import { Button } from '../components/Button';
+  const child = screen.getByTestId('child-component-mock');
 
-it('should handle button click', () => {
-  const onClickMock = vi.fn();
-  render(<Button onClick={onClickMock} label="Click me" />);
+  // Generics are not necessary
+  expect(child).toHaveProp<typeof ChildComponent>({ propA: 'value' });
+  expect(child).toHaveProps<typeof ChildComponent>({
+    propA: 'value',
+    propB: 42,
+  });
 
-  const buttonElement = screen.getByTestId('button-mock');
-  const props = getMockComponentProps<typeof Button>(buttonElement);
-  
-  // Access function props directly
+  // Calls functions passed as prop
+  const props = getMockComponentProps<typeof ChildComponent>(child);
+
+  // After call you could check the effect to the testing MainComponent
   props.onClick?.();
-  expect(onClickMock).toHaveBeenCalled();
-  
-  // Access other props
-  expect(props.label).toBe('Click me');
 });
 ```
 
 ## API
 
-### `createMockComponent<T>(testId: string)`
+### Component Mocks
 
-Creates a mock React component with type safety. Used inside `vi.mock()` or `jest.mock()`.
+- **`createMockComponent<T>(testId: string)`**  
+  Returns a mock React component. Use inside `vi.mock()` or `jest.mock()`.
 
-### `getMockComponentProps<T>(element: HTMLElement)`
+- **`getMockComponentProps<T>(element: HTMLElement)`**  
+  Extracts props from the mocked component. Function props retain original references.
 
-Extracts all props (including functions) from a mock component. Functions remain as actual function references, not serialized strings.
+### Matchers
 
-## Roadmap
+Available without setup (Vitest and Jest supported):
 
-See our [TODO](TODO.md) for planned features and upcoming improvements.
+- **`toHaveProp(expected: Partial<T>)`**  
+  Asserts that a component received a specific prop.
+
+- **`toHaveProps(expected: Partial<T>)`**  
+  Asserts that a component received a set of props.
+
 
 ## License
 
