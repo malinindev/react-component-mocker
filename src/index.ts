@@ -5,19 +5,31 @@ export type { ComponentMockElement } from './types/common.js';
 
 import './customMatchers/toHaveProps.js';
 import './customMatchers/toHaveProp.js';
-import 'vitest';
 import type { ComponentProps, ComponentType } from 'react';
 
-declare module 'vitest' {
-  interface CustomMatchers<R = unknown> {
-    toHaveProps: <T extends ComponentType<any>>(
-      expectedProps?: ComponentProps<T>
-    ) => R;
-    toHaveProp: <T extends ComponentType<any>>(
-      keyOrKeyValue: keyof ComponentProps<T> | Partial<ComponentProps<T>>
-    ) => R;
-  }
+type ToHavePropsMatcherType<R> = <TComponent extends ComponentType<any>>(
+  expectedProps?: ComponentProps<TComponent>
+) => R;
 
-  interface Assertion<T = any> extends CustomMatchers<T> {}
-  interface AsymmetricMatchersContaining extends CustomMatchers {}
+type ToHavePropMatcherType<R> = <TComponent extends ComponentType<any>>(
+  keyOrKeyValue:
+    | keyof ComponentProps<TComponent>
+    | Partial<ComponentProps<TComponent>>
+) => R;
+
+declare module 'expect' {
+  interface Matchers<R> {
+    toHaveProps: ToHavePropsMatcherType<R>;
+    toHaveProp: ToHavePropMatcherType<R>;
+  }
+}
+
+declare global {
+  // biome-ignore lint/style/noNamespace: Jest type augmentation requires namespace
+  namespace jest {
+    interface Matchers<R> {
+      toHaveProps: ToHavePropsMatcherType<R>;
+      toHaveProp: ToHavePropMatcherType<R>;
+    }
+  }
 }
