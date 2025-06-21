@@ -24,8 +24,8 @@
     "types": [
       "react",
       "react-dom",
-      "@testing-library/jest-dom",
-      "vitest/globals"
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ]
   },
   "include": ["src/**/*", "examples/**/*"],

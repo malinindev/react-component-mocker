@@ -62,6 +62,26 @@ Available without setup (Vitest and Jest supported):
   Asserts that a component received a set of props.
 
 
+## Jest Setup
+
+This package is built as ES modules. Jest works with CommonJS by default, so you need to configure Jest to transform ES module code.
+
+```ts
+const config = {
+  preset: 'ts-jest',
+  transform: {
+    // Allow ts-jest to handle .js files (this package is built as JS ES modules)
+    '^.+\\.(ts|tsx|js|jsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json',
+    }],
+  },
+  // By default, Jest ignores node_modules. Include this package for transformation
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-component-mocker)/)'
+  ],
+};
+```
+
 ## License
 
 MIT
