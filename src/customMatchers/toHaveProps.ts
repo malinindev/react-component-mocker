@@ -1,4 +1,3 @@
-import { expect } from 'vitest';
 import { getMockComponentProps } from '../lib/getMockComponentProps.js';
 import { deepEqual } from '../utils/deepEqual/index.js';
 import { DiffError } from './helpers/DiffError.js';
