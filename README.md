@@ -2,7 +2,7 @@
 
 Mock internal child components in unit tests with full type safety. Focus only on your main component’s logic.
 
-[Vitest examples](examples/)
+[Vitest and Jest examples](examples/)
 
 ## Installation
 
