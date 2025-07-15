@@ -148,4 +148,28 @@ describe('createMockComponent', () => {
     expect(debugData).toContain('"theme":"dark"');
     expect(debugData).toContain('[Function: themeHandler]');
   });
+
+  it('handles tabContent with React elements without stack overflow', () => {
+    const ModalTabsMock = createMockComponent('modal-tabs-mock');
+
+    const TestComponent: React.FC = () => (
+      <ModalTabsMock
+        shouldShowTabs
+        tabContent={{
+          remove: <div>test1</div>,
+          set: <div>test2</div>,
+        }}
+      />
+    );
+
+    render(<TestComponent />);
+
+    const element = screen.getByTestId('modal-tabs-mock');
+    expect(element).toBeInTheDocument();
+
+    const props = getMockComponentProps(element);
+
+    expect(props.shouldShowTabs).toBe(true);
+    expect(props.tabContent).toBeDefined();
+  });
 });
