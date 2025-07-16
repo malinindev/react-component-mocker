@@ -1,5 +1,12 @@
 # react-component-mocker
 
+## 0.2.1
+
+### Patch Changes
+
+- e587719: update deps
+- 8391b75: prevent call stack error when React component is passed to mock
+
 ## 0.2.0
 
 ### Minor Changes
