@@ -1,7 +1,7 @@
-import type { ComponentType, ReactNode, JSX } from 'react';
-import { useRef, createElement } from 'react';
-import type { ComponentMockElement } from '../types/common.js';
+import type { ComponentType, JSX, ReactNode } from 'react';
+import { createElement, useRef } from 'react';
 import { MOCK_COMPONENT } from '../const.js';
+import type { ComponentMockElement } from '../types/common.js';
 import { preparePropsToStringify } from '../utils/preparePropsToStringify.js';
 
 type MockComponentType<P = Record<string, unknown>> = (props: P) => JSX.Element;
@@ -16,7 +16,7 @@ export const createMockComponent = <T extends ComponentType<any>>(
   const MockComponent: MockComponentType<InferredProps<T>> = ({
     children,
     ...restProps
-  }) => {
+  }: InferredProps<T>) => {
     const ref = useRef<ComponentMockElement>(null);
     const propsToAssign =
       Object.keys(restProps).length > 0 ? restProps : undefined;
