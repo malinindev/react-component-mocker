@@ -19,9 +19,7 @@
       "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto",
-      "bracketSpacing": true
+      "quoteStyle": "single"
     },
     "globals": ["React"]
   },
@@ -30,118 +28,25 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "complexity": {
-        "noUselessFragments": "error",
-        "noBannedTypes": "error",
-        "noExtraBooleanCast": "error",
-        "noUselessCatch": "error",
-        "noUselessTypeConstraint": "error",
-        "useArrowFunction": "error",
-        "noAdjacentSpacesInRegex": "error"
-      },
       "nursery": {
-        "useExplicitType": "error"
+        "noMisusedPromises": "error"
       },
       "correctness": {
-        "noConstAssign": "error",
-        "noConstantCondition": "error",
-        "noEmptyCharacterClassInRegex": "error",
-        "noEmptyPattern": "error",
-        "noGlobalObjectCalls": "error",
-        "noInnerDeclarations": "error",
-        "noInvalidConstructorSuper": "error",
-        "noNonoctalDecimalEscape": "error",
-        "noPrecisionLoss": "error",
-        "noSelfAssign": "error",
-        "noSetterReturn": "error",
-        "noSwitchDeclarations": "error",
-        "noUndeclaredVariables": "error",
-        "noUnreachable": "error",
-        "noUnreachableSuper": "error",
-        "noUnsafeFinally": "error",
-        "noUnsafeOptionalChaining": "error",
-        "noUnusedLabels": "error",
-        "noUnusedVariables": "error",
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error",
-        "useIsNan": "error",
-        "useValidForDirection": "error",
-        "useYield": "error",
-        "noInvalidBuiltinInstantiation": "error",
-        "useValidTypeof": "error"
+        "useExhaustiveDependencies": "warn"
       },
       "style": {
-        "noNamespace": "error",
-        "useAsConstAssertion": "error",
+        "useConst": "error",
         "useBlockStatements": "off",
         "useArrayLiterals": "off"
       },
       "suspicious": {
-        "noAsyncPromiseExecutor": "error",
-        "noCatchAssign": "error",
-        "noClassAssign": "error",
-        "noCompareNegZero": "error",
-        "noControlCharactersInRegex": "error",
-        "noDebugger": "error",
-        "noDuplicateCase": "error",
-        "noDuplicateClassMembers": "error",
-        "noDuplicateObjectKeys": "error",
-        "noDuplicateParameters": "error",
-        "noEmptyBlockStatements": "error",
         "noExplicitAny": "off",
-        "noExtraNonNullAssertion": "error",
-        "noFallthroughSwitchClause": "error",
-        "noFunctionAssign": "error",
-        "noGlobalAssign": "error",
-        "noImportAssign": "error",
-        "noMisleadingCharacterClass": "error",
-        "noMisleadingInstantiator": "error",
-        "noPrototypeBuiltins": "error",
-        "noRedeclare": "error",
-        "noShadowRestrictedNames": "error",
-        "noSparseArray": "error",
-        "noUnsafeDeclarationMerging": "error",
-        "noUnsafeNegation": "error",
-        "useGetterReturn": "error",
-        "noWith": "error"
+        "noVar": "error"
+      },
+      "complexity": {
+        "noArguments": "error"
       }
     },
     "includes": ["**", "!**/dist", "!**/.eslintrc.cjs"]
-  },
-  "overrides": [
-    {
-      "includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noConstAssign": "off",
-            "noGlobalObjectCalls": "off",
-            "noInvalidBuiltinInstantiation": "off",
-            "noInvalidConstructorSuper": "off",
-            "noSetterReturn": "off",
-            "noUndeclaredVariables": "off",
-            "noUnreachable": "off",
-            "noUnreachableSuper": "off"
-          },
-          "style": {
-            "useConst": "error"
-          },
-          "suspicious": {
-            "noDuplicateClassMembers": "off",
-            "noDuplicateObjectKeys": "off",
-            "noDuplicateParameters": "off",
-            "noFunctionAssign": "off",
-            "noImportAssign": "off",
-            "noRedeclare": "off",
-            "noUnsafeNegation": "off",
-            "useGetterReturn": "off",
-            "noVar": "error"
-          },
-          "complexity": {
-            "noArguments": "error"
-          }
-        }
-      }
-    }
-  ]
+  }
 }

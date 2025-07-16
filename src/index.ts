@@ -25,7 +25,6 @@ declare module 'expect' {
 }
 
 declare global {
-  // biome-ignore lint/style/noNamespace: Jest type augmentation requires namespace
   namespace jest {
     interface Matchers<R> {
       toHaveProps: ToHavePropsMatcherType<R>;
