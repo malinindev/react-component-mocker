@@ -1,6 +1,7 @@
 import { diff as jestDiff } from 'jest-diff';
 
-const isVitest = typeof process !== 'undefined' && 'VITEST' in process.env;
+const isVitest: boolean =
+  typeof process !== 'undefined' && 'VITEST' in process.env;
 
 /**
  * Error class with actual and expected fields for Jest/Vitest diff display.

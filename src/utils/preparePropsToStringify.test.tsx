@@ -60,7 +60,7 @@ describe('preparePropsToStringify', () => {
         'string',
         42,
         () => 'test',
-        function namedFunc() {
+        function namedFunc(): string {
           return 'named';
         },
       ],
@@ -99,7 +99,7 @@ describe('preparePropsToStringify', () => {
         options: ['option1', () => 'option2'],
       },
       callbacks: [
-        function callback1() {
+        function callback1(): string {
           return 'cb1';
         },
         {
