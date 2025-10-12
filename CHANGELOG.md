@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.2.2
+
+### Patch Changes
+
+- f77f966: Omit children prop type from toHaveProps matcher
+
 ## 0.2.1
 
 ### Patch Changes
