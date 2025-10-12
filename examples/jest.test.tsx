@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom';
-import { jest, describe, it } from '@jest/globals';
+import { describe, it, jest } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 import { createMockComponent, getMockComponentProps } from '../src/index.js';
-import { ContainerComponent } from './components/ContainerComponent.js';
+import type { ComponentWithChildren } from './components/ComponentWithChildren.js';
 import type { ComprehensiveComponent } from './components/ComprehensiveComponent.js';
+import { ContainerComponent } from './components/ContainerComponent.js';
 
 jest.mock('./components/ComprehensiveComponent.js', () => ({
   ComprehensiveComponent: createMockComponent('comprehensive-component-mock'),
@@ -133,5 +134,23 @@ describe('ContainerComponent with Jest', () => {
     expect(onNestingFnMock).not.toHaveBeenCalled();
     componentProps.nestingProp.onNestingFn?.();
     expect(onNestingFnMock).toHaveBeenCalled();
+  });
+
+  it('should work with components that have required children prop', () => {
+    const MockComponentWithChildren = createMockComponent<
+      typeof ComponentWithChildren
+    >('saved-signature-container');
+
+    render(
+      <MockComponentWithChildren onClick={jest.fn()}>
+        <div>Some content</div>
+      </MockComponentWithChildren>
+    );
+
+    const container = screen.getByTestId('saved-signature-container');
+
+    expect(container).toHaveProps<typeof ComponentWithChildren>({
+      onClick: expect.any(Function),
+    });
   });
 });

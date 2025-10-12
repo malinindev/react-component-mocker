@@ -8,7 +8,7 @@ import './customMatchers/toHaveProp.js';
 import type { ComponentProps, ComponentType } from 'react';
 
 type ToHavePropsMatcherType<R> = <TComponent extends ComponentType<any>>(
-  expectedProps?: ComponentProps<TComponent>
+  expectedProps?: Omit<ComponentProps<TComponent>, 'children'>
 ) => R;
 
 type ToHavePropMatcherType<R> = <TComponent extends ComponentType<any>>(

@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { createMockComponent, getMockComponentProps } from '../src/index.js';
-import { ContainerComponent } from './components/ContainerComponent.js';
+import type { ComponentWithChildren } from './components/ComponentWithChildren.js';
 import type { ComprehensiveComponent } from './components/ComprehensiveComponent.js';
+import { ContainerComponent } from './components/ContainerComponent.js';
 
 vi.mock('./components/ComprehensiveComponent.js', () => ({
   ComprehensiveComponent: createMockComponent('comprehensive-component-mock'),
@@ -132,5 +133,23 @@ describe('ContainerComponent', () => {
     expect(onNestingFnMock).not.toHaveBeenCalled();
     componentProps.nestingProp.onNestingFn?.();
     expect(onNestingFnMock).toHaveBeenCalled();
+  });
+
+  it('should work with components that have required children prop', () => {
+    const MockComponentWithChildren = createMockComponent<
+      typeof ComponentWithChildren
+    >('saved-signature-container');
+
+    render(
+      <MockComponentWithChildren onClick={vi.fn()}>
+        <div>Some content</div>
+      </MockComponentWithChildren>
+    );
+
+    const container = screen.getByTestId('saved-signature-container');
+
+    expect(container).toHaveProps<typeof ComponentWithChildren>({
+      onClick: expect.any(Function),
+    });
   });
 });
