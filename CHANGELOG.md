@@ -1,5 +1,12 @@
 # react-component-mocker
 
+## 0.2.3
+
+### Patch Changes
+
+- 053673c: replace npm with bun
+- 6524d23: update to have prop matcher
+
 ## 0.2.2
 
 ### Patch Changes
