@@ -27,17 +27,20 @@
   "scripts": {
     "dev": "tsc --project tsconfig.build.json --watch",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
-    "build:pack": "npm run build && npm pack",
+    "build:pack": "bun run build && npm pack",
     "release:prepare": "changeset",
     "release:publish": "changeset publish",
-    "prepublishOnly": "npm run check:all",
-    "test": "vitest run && npm run test:jest",
+    "prepublishOnly": "bun run build && bun run check:all",
+    "test": "vitest run && bun run test:jest",
     "test:jest": "jest",
-    "check:all": "npm run build && npm run check:biome && npm run check:exports && npm run test",
+    "check:all": "bun run build && bun run check:biome && bun run check:exports && bun run test",
     "check:type": "tsc --noEmit",
     "check:exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "check:biome": "biome check ./src ./examples",
     "fix:biome": "biome check --write ./src ./examples"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
   },
   "publishConfig": {
     "access": "public"
