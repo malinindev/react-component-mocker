@@ -1,7 +1,7 @@
 import { getMockComponentProps } from '../lib/getMockComponentProps.js';
+import type { ComponentMockElement } from '../types/common.js';
 import { deepEqual } from '../utils/deepEqual/index.js';
 import { DiffError } from './helpers/DiffError.js';
-import type { ComponentMockElement } from '../types/common.js';
 
 interface MatcherResult {
   pass: boolean;
