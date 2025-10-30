@@ -23,9 +23,9 @@ describe('Custom Matcher: toHaveProp', () => {
 
     const element = screen.getByTestId('test-component');
 
-    expect(element).toHaveProp('title');
-    expect(element).toHaveProp('count');
-    expect(element).toHaveProp('onClick');
+    expect(element).toHaveProp<TestComponent>('title');
+    expect(element).toHaveProp<TestComponent>('count');
+    expect(element).toHaveProp<TestComponent>('onClick');
   });
 
   it('should fail when element does not have prop by key', () => {
@@ -57,9 +57,9 @@ describe('Custom Matcher: toHaveProp', () => {
 
     const element = screen.getByTestId('test-component-3');
 
-    expect(element).toHaveProp({ title: 'Hello World' });
-    expect(element).toHaveProp({ count: 42 });
-    expect(element).toHaveProp({ onClick: mockClick });
+    expect(element).toHaveProp<TestComponent>({ title: 'Hello World' });
+    expect(element).toHaveProp<TestComponent>({ count: 42 });
+    expect(element).toHaveProp<TestComponent>({ onClick: mockClick });
   });
 
   it('should fail when prop value does not match expected', () => {
@@ -74,7 +74,7 @@ describe('Custom Matcher: toHaveProp', () => {
     const element = screen.getByTestId('test-component-4');
 
     expect(() => {
-      expect(element).toHaveProp({ title: 'Expected Title' });
+      expect(element).toHaveProp<TestComponent>({ title: 'Expected Title' });
     }).toThrow('Expected element to have prop "title" with correct value');
   });
 
@@ -110,8 +110,8 @@ describe('Custom Matcher: toHaveProp', () => {
 
     const element = screen.getByTestId('test-component-6');
 
-    expect(element).toHaveProp('isActive');
-    expect(element).toHaveProp({ isActive: true });
+    expect(element).toHaveProp<TestComponent>('isActive');
+    expect(element).toHaveProp<TestComponent>({ isActive: true });
   });
 
   it('should fail when element is not a mock component', () => {
@@ -120,7 +120,7 @@ describe('Custom Matcher: toHaveProp', () => {
     const element = screen.getByTestId('regular-div');
 
     expect(() => {
-      expect(element).toHaveProp('title');
+      expect(element).toHaveProp<TestComponent>('title');
     }).toThrow(
       'Element with testId "regular-div" is not a mock component. Please create a mock component first using createMockComponent("regular-div").'
     );
@@ -136,7 +136,119 @@ describe('Custom Matcher: toHaveProp', () => {
     const element = screen.getByTestId('test-component-7');
 
     expect(() => {
-      expect(element).toHaveProp({ title: 'Test', count: 1 });
+      expect(element).toHaveProp<TestComponent>({ title: 'Test', count: 1 });
     }).toThrow('Expected exactly one key-value pair');
+  });
+
+  describe('two-argument syntax: toHaveProp<TestComponent>(key, value)', () => {
+    it('should pass when element has prop with expected value', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-8');
+      const mockClick = vi.fn();
+
+      render(
+        <MockComponent title="Hello World" count={42} onClick={mockClick} />
+      );
+
+      const element = screen.getByTestId('test-component-8');
+
+      expect(element).toHaveProp<TestComponent>('title', 'Hello World');
+      expect(element).toHaveProp<TestComponent>('count', 42);
+      expect(element).toHaveProp<TestComponent>('onClick', mockClick);
+    });
+
+    it('should pass with boolean false value', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-9');
+      const mockClick = vi.fn();
+
+      render(
+        <MockComponent
+          title="Test"
+          count={1}
+          onClick={mockClick}
+          isActive={false}
+        />
+      );
+
+      const element = screen.getByTestId('test-component-9');
+
+      expect(element).toHaveProp<TestComponent>('isActive', false);
+    });
+
+    it('should pass with boolean true value', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-10');
+      const mockClick = vi.fn();
+
+      render(
+        <MockComponent
+          title="Test"
+          count={1}
+          onClick={mockClick}
+          isActive={true}
+        />
+      );
+
+      const element = screen.getByTestId('test-component-10');
+
+      expect(element).toHaveProp<TestComponent>('isActive', true);
+    });
+
+    it('should fail when prop value does not match expected', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-11');
+      const mockClick = vi.fn();
+
+      render(
+        <MockComponent title="Actual Title" count={100} onClick={mockClick} />
+      );
+
+      const element = screen.getByTestId('test-component-11');
+
+      expect(() => {
+        expect(element).toHaveProp<TestComponent>('title', 'Expected Title');
+      }).toThrow('Expected element to have prop "title" with correct value');
+    });
+
+    it('should fail when prop key does not exist', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-12');
+      const mockClick = vi.fn();
+
+      render(<MockComponent title="Test" count={1} onClick={mockClick} />);
+
+      const element = screen.getByTestId('test-component-12');
+
+      expect(() => {
+        expect(element).toHaveProp('nonExistentProp', 'value');
+      }).toThrow(
+        /Expected element to have prop "nonExistentProp", but it doesn't. Available props:/
+      );
+    });
+
+    it('should work with number zero', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-13');
+      const mockClick = vi.fn();
+
+      render(<MockComponent title="Test" count={0} onClick={mockClick} />);
+
+      const element = screen.getByTestId('test-component-13');
+
+      expect(element).toHaveProp<TestComponent>('count', 0);
+    });
+
+    it('should work with empty string', () => {
+      const MockComponent =
+        createMockComponent<TestComponent>('test-component-14');
+      const mockClick = vi.fn();
+
+      render(<MockComponent title="" count={1} onClick={mockClick} />);
+
+      const element = screen.getByTestId('test-component-14');
+
+      expect(element).toHaveProp<TestComponent>('title', '');
+    });
   });
 });

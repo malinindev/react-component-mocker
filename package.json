@@ -33,12 +33,11 @@
     "prepublishOnly": "npm run check:all",
     "test": "vitest run && npm run test:jest",
     "test:jest": "jest",
-    "check:all": "npm run build && npm run check:lint && npm run check:format && npm run check:exports && npm run test",
+    "check:all": "npm run build && npm run check:biome && npm run check:exports && npm run test",
     "check:type": "tsc --noEmit",
     "check:exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
-    "check:lint": "biome lint ./src ./examples",
-    "check:format": "biome format ./src ./examples",
-    "fix:format": "biome format --write ./src ./examples"
+    "check:biome": "biome check ./src ./examples",
+    "fix:biome": "biome check --write ./src ./examples"
   },
   "publishConfig": {
     "access": "public"

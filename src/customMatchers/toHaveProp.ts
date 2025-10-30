@@ -1,7 +1,7 @@
 import { getMockComponentProps } from '../lib/getMockComponentProps.js';
+import type { ComponentMockElement } from '../types/common.js';
 import { deepEqual } from '../utils/deepEqual/index.js';
 import { DiffError } from './helpers/DiffError.js';
-import type { ComponentMockElement } from '../types/common.js';
 
 interface MatcherResult {
   pass: boolean;
@@ -11,11 +11,62 @@ interface MatcherResult {
 expect.extend({
   toHaveProp(
     received: ComponentMockElement,
-    keyOrKeyValue: string | Record<string, any>
+    keyOrKeyValue: string | Record<string, any>,
+    value?: any
   ): MatcherResult {
     try {
       const actualProps = getMockComponentProps(received);
 
+      // for syntax toHaveProp(key, value)
+      if (value) {
+        if (typeof keyOrKeyValue !== 'string') {
+          throw new Error(
+            'Key must be a string when using two-argument syntax'
+          );
+        }
+
+        const key = keyOrKeyValue;
+        const expectedValue = value;
+        const hasKey = key in actualProps;
+
+        if (!hasKey) {
+          return {
+            pass: false,
+            message: (): string => {
+              const availableKeys = Object.keys(actualProps);
+              const availableKeysFormatted =
+                availableKeys.length > 0 ? availableKeys.join(', ') : 'none';
+              return `Expected element to have prop "${key}", but it doesn't. Available props: ${availableKeysFormatted}`;
+            },
+          };
+        }
+
+        const actualValue = actualProps[key];
+        const isMatch = deepEqual(actualValue, expectedValue);
+
+        if (isMatch) {
+          return {
+            pass: true,
+            message: (): string => {
+              const expectedFormatted = JSON.stringify(expectedValue);
+              return `Expected element not to have prop "${key}" with value ${expectedFormatted}, but it does`;
+            },
+          };
+        }
+
+        return {
+          pass: false,
+          message: (): string => {
+            throw new DiffError(
+              `Expected element to have prop "${key}" with correct value`,
+              actualValue,
+              expectedValue
+            );
+          },
+        };
+      }
+
+      // syntax toHaveProp(key) or toHaveProp({ key: value })
       if (typeof keyOrKeyValue === 'string') {
         const hasKey = keyOrKeyValue in actualProps;
 
