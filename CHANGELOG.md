@@ -1,5 +1,11 @@
 # react-component-mocker
 
+## 0.3.0
+
+### Minor Changes
+
+- 4bd0ae5: Add `react-component-mocker/vitest`: import it in a setup file on Vitest 5, which no longer reads the `jest.Matchers` types of `toHaveProp` and `toHaveProps`. The package now has an `exports` map, so only `react-component-mocker` and `react-component-mocker/vitest` can be imported. `jest-diff`, which the matchers import, is now a dependency.
+
 ## 0.2.3
 
 ### Patch Changes
