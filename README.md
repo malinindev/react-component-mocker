@@ -53,7 +53,11 @@ it('works with props correctly', () => {
 
 ### Matchers
 
-Available without setup (Vitest and Jest supported):
+Available without setup (Vitest and Jest supported). On Vitest 5, add their types once, in a setup file:
+
+```ts
+import 'react-component-mocker/vitest';
+```
 
 - **`toHaveProp(expected: Partial<T>)`**  
   Asserts that a component received a specific prop.
