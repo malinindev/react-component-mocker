@@ -5,23 +5,10 @@ export type { ComponentMockElement } from './types/common.js';
 
 import './customMatchers/toHaveProps.js';
 import './customMatchers/toHaveProp.js';
-import type { ComponentProps, ComponentType } from 'react';
-
-type ToHavePropsMatcherType<R> = <TComponent extends ComponentType<any>>(
-  expectedProps?: Omit<ComponentProps<TComponent>, 'children'>
-) => R;
-
-type ToHavePropMatcherType<R> = {
-  <TComponent extends ComponentType<any>>(
-    keyOrKeyValue:
-      | keyof ComponentProps<TComponent>
-      | Partial<ComponentProps<TComponent>>
-  ): R;
-  <TComponent extends ComponentType<any>>(
-    key: keyof ComponentProps<TComponent>,
-    value: ComponentProps<TComponent>[keyof ComponentProps<TComponent>]
-  ): R;
-};
+import type {
+  ToHavePropMatcherType,
+  ToHavePropsMatcherType,
+} from './types/matchers.js';
 
 declare module 'expect' {
   interface Matchers<R> {
