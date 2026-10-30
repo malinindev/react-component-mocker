@@ -14,6 +14,8 @@ on:
 
 permissions:
   contents: write
+  # npm trusted publishing: the job signs in to npm with an OIDC token
+  id-token: write
 
 jobs:
   release:
@@ -25,8 +27,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup .npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      # Trusted publishing needs npm 11.5.1 or later, which Node 24 ships
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
 
       - name: Setup Bun and dependencies
         uses: ./.github/actions/setup
@@ -40,4 +45,3 @@ jobs:
           publish: bun run release:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
